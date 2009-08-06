@@ -1,5 +1,5 @@
 package Catalyst::Plugin::AccessLog::Formatter;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 # ABSTRACT: Log formatter for Catalyst::Plugin::AccessLog
@@ -30,7 +30,7 @@ sub escape_string {
   return "" unless defined $str and length $str;
 
   $str =~ s/(["\\])/\\$1/g;
-  $str =~ s/([\r\n\t\v])/$whitespace_escapes{$1}/eg;
+  $str =~ s/([\r\n\t\x0b])/$whitespace_escapes{$1}/eg;
   $str =~ s/([^[:print:]])/sprintf '\x%02x', ord $1/eg;
 
   return $str;
@@ -134,22 +134,34 @@ item ['s', 'status'] => sub {
 };
 
 
+sub _request_start {
+  my ($c) = @_;
+
+  # Remove the hack when we're comfortable depending on Catalyst 5.8008.
+  my @time = $c->stats->can('created')
+    ? $c->stats->created
+    : @{ $c->stats->{tree}->getNodeValue->{t} };
+  return $time[0] + $time[1] / 1_000_000;
+}
+
 item ['t', 'apache_time'] => sub {
   my ($c, $arg) = @_;
+  return "-" unless $c->use_stats;
   my $config = $c->config->{'Plugin::AccessLog'};
   my $format = $arg || '[%d/%b/%Y:%H:%M:%S %z]'; # Apache default
-  return DateTime->now(time_zone => $config->{time_zone})
-    ->strftime($format);
+  return DateTime->from_epoch(epoch => _request_start($c), 
+    time_zone => $config->{time_zone})->strftime($format);
 };
 
 
 item ['time', 'datetime'] => sub {
   my ($c, $arg) = @_;
+  return "-" unless $c->use_stats;
   my $config = $c->config->{'Plugin::AccessLog'};
   my $format = $arg || $config->{time_format};
 
-  return DateTime->now(time_zone => $config->{time_zone})
-    ->strftime($format);
+  return DateTime->from_epoch(epoch => _request_start($c),
+    time_zone => $config->{time_zone})->strftime($format);
 };
 
 
@@ -199,7 +211,7 @@ Catalyst::Plugin::AccessLog::Formatter - Log formatter for Catalyst::Plugin::Acc
 
 =head1 VERSION
 
-version 0.01
+version 0.02
 
 =head1 DESCRIPTION
 
@@ -303,8 +315,7 @@ The HTTP status of the response, e.g. 200 or 404.
 
 =item %[apache_time], %t
 
-The time as the log line is being printed. Ideally, this would be the time
-the request was received, but this is currently unimplemented.
+The time that the request was received.
 
 While this escape and the C<%[time]> escape both take an optional
 C<strftime> argument, they differ in their default formats. This escape
@@ -315,8 +326,7 @@ nonetheless compatible with apache.
 
 =item %[time], %[datetime]
 
-The time as the log line is being printed. Ideally, this would be the time
-the request was received, but this is currently unimplemented.
+The time that the request was received.
 
 While this escape and the C<%[apache_time]> escape both take an optional
 C<strftime> argument, they differ in their default formats. This escape
