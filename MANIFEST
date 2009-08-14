@@ -7,3 +7,9 @@ README
 dist.ini
 lib/Catalyst/Plugin/AccessLog.pm
 lib/Catalyst/Plugin/AccessLog/Formatter.pm
+t/01-formatter.t
+t/02-plugin.t
+t/lib/MockStats.pm
+t/lib/MockUser.pm
+t/lib/TestApp.pm
+t/lib/TestApp/Controller/Root.pm

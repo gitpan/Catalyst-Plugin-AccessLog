@@ -15,4 +15,4 @@ requires:
   Moose: 0
   Scalar::Util: 0
   namespace::autoclean: 0
-version: 0.02
+version: 1.00

@@ -9,7 +9,7 @@ WriteMakefile(
   NAME      => 'Catalyst::Plugin::AccessLog',
   AUTHOR    => 'Andrew\ Rodland\ \<andrew\@hbslabs\.com\>\,\ Murray\ \<sysmon\@cpan\.org\>',
   ABSTRACT  => 'Request\ logging\ from\ within\ Catalyst',
-  VERSION   => '0.02',
+  VERSION   => '1.00',
   EXE_FILES => [ qw() ],
   (eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => 'perl') : ()),
   PREREQ_PM    => {
