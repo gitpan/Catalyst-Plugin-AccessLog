@@ -3,16 +3,16 @@ abstract: 'Request logging from within Catalyst'
 author:
   - 'Andrew Rodland <andrew@hbslabs.com>'
   - 'Murray <sysmon@cpan.org>'
-generated_by: 'Dist::Zilla::Plugin::MetaYAML version 1.092071'
+generated_by: 'Dist::Zilla version 1.093371'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Catalyst-Plugin-AccessLog
 requires:
-  Catalyst::Runtime: 5.8004
+  Catalyst::Runtime: 5.80004
   DateTime: 0
   Moose: 0
   Scalar::Util: 0
   namespace::autoclean: 0
-version: 1.00
+version: 1.01

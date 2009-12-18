@@ -13,3 +13,5 @@ t/lib/MockStats.pm
 t/lib/MockUser.pm
 t/lib/TestApp.pm
 t/lib/TestApp/Controller/Root.pm
+t/release-pod-coverage.t
+t/release-pod-syntax.t

@@ -1,10 +1,10 @@
 package Catalyst::Plugin::AccessLog;
-our $VERSION = '1.00';
-
+our $VERSION = '1.01';
 
 use namespace::autoclean;
 use Moose::Role;
 use Scalar::Util qw(reftype blessed);
+use Catalyst::Utils;
 
 after 'setup_finalize' => sub { # Init ourselves
   my $c = shift;
@@ -70,13 +70,10 @@ after 'finalize' => sub {
   $c->access_log_write($line);
 };
 
-no Moose::Role;
-
 1;
 
 
 __END__
-
 =pod
 
 =head1 NAME
@@ -85,7 +82,7 @@ Catalyst::Plugin::AccessLog
 
 =head1 VERSION
 
-version 1.00
+version 1.01
 
 =head1 SYNOPSIS
 
@@ -160,7 +157,7 @@ tied to the value of the debug flag. If this option is set, stats will be
 enabled for the application regardless of the C<-Stats> or C<-Debug> flags, or
 the C<MYAPP_STATS> or C<MYAPP_DEBUG> environment variables.
 
-=back 
+=back
 
 =head1 NOTES
 
@@ -180,8 +177,6 @@ or bad things will happen to you and everyone you know.
 
 L<http://github.com/arodland/Catalyst-Plugin-AccessLog>
 
-
-
 =head1 AUTHORS
 
   Andrew Rodland <andrew@hbslabs.com>
@@ -194,6 +189,5 @@ This software is copyright (c) 2009 by Andrew Rodland.
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
-=cut 
-
+=cut
 

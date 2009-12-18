@@ -1,6 +1,5 @@
 package Catalyst::Plugin::AccessLog::Formatter;
-our $VERSION = '1.00';
-
+our $VERSION = '1.01';
 
 # ABSTRACT: Log formatter for Catalyst::Plugin::AccessLog
 
@@ -147,9 +146,26 @@ item ['p', 'port'] => sub {
 };
 
 
+item ['q', 'query' ] => sub {
+  my $qstring = $_[1]->req->uri->query;
+  if (defined $qstring && length $qstring) {
+    return "?$qstring";
+  } else {
+    return "";
+  }
+};
+
+
 item ['r', 'request_line'] => sub { # Mostly for apache's sake
   my ($self, $c) = @_;
-  return $c->req->method . " /" . $c->req->path . " " . $c->req->protocol;
+  my $path = $c->req->path;
+  my $query = $c->req->uri->query;
+  if (defined $query && length $query) {
+    $query = "?$query";
+  } else {
+    $query = "";
+  }
+  return $c->req->method . " /${path}${query} " . $c->req->protocol;
 };
 
 
@@ -249,12 +265,9 @@ item 'pid' => sub {
 };
 
 
-no Moose;
-
 1;
 
 __END__
-
 =pod
 
 =head1 NAME
@@ -263,7 +276,7 @@ Catalyst::Plugin::AccessLog::Formatter - Log formatter for Catalyst::Plugin::Acc
 
 =head1 VERSION
 
-version 1.00
+version 1.01
 
 =head1 DESCRIPTION
 
@@ -310,8 +323,6 @@ strings, with a reasonably good level of compatibility, or you can use a
 slightly more readable format. The log format is documented in detail in
 L<Catalyst::Plugin::AccessLog::Formatter>.
 
-
-
 =item time_format
 
 B<Default:> C<'%Y-%m-%dT%H:%M:%S'> (ISO 8601)
@@ -320,8 +331,6 @@ The default time format for the C<%t> / C<%[time]> escape. This is a
 C<strftime> format string, which will be provided to L<DateTime>'s
 C<strftime> method.
 
-
-
 =item time_zone
 
 B<Default:> local
@@ -329,8 +338,6 @@ B<Default:> local
 The timezone to use when printing times in access logs. This will be passed
 to L<DateTime::TimeZone>'s constructor. Olson timezone names, POSIX TZ
 values, and the keywords C<"local"> and C<"UTC"> are reasonable choices.
-
-
 
 =item hostname_lookups
 
@@ -341,9 +348,7 @@ C<%[remote_hostname]> escape will resolve the client IP address using
 reverse DNS. This is generally not recommended for reasons of performance
 and security. Equivalent to the Apache option C<HostnameLookups>.
 
-
-
-=back 
+=back
 
 =head2 Escapes
 
@@ -353,20 +358,14 @@ and security. Equivalent to the Apache option C<HostnameLookups>.
 
 The IP address of the remote client.
 
-
-
 =item %[clf_size], %b
 
 The size of the response content in bytes. If the response content is empty,
 produces a dash C<-> instead of 0. This is compatible with CLF.
 
-
-
 =item %[size], %B
 
 The size of the response content in bytes. Always numeric, even for 0.
-
-
 
 =item %[remote_host], %h
 
@@ -374,15 +373,11 @@ The hostname of the remote client, if the C<hostname_lookups> config option
 is true. Otherwise, the IP address of the remote client, as
 C<%[remote_address]>.
 
-
-
 =item %[header], %i
 
 The value of the request header named in the (mandatory) argument, or "-" if
 no such header was provided. Usage: C<%{User-agent}i> to get the
 C<User-agent> request header.
-
-
 
 =item %l
 
@@ -391,13 +386,9 @@ this option returns the remote username from an C<ident> check, if the
 module is present, which it never is, which means it always produces a
 single dash on Apache as well. We don't bother implementing ident.
 
-
-
 =item %[method], %m
 
 The request method (e.g. GET, POST).
-
-
 
 =item %[port], %p
 
@@ -405,19 +396,18 @@ The port number that the request was received on. In apache this is the
 server's "canonical port", however this is information that's not available
 to Catalyst.
 
+=item %[query], %q
 
+The query string (beginning with a ? if there is a query string, otherwise
+an empty string).
 
 =item %[request_line], %r
 
 The first line of the HTTP request, e.g. C<"GET / HTTP/1.0">.
 
-
-
 =item %[status], %s
 
 The HTTP status of the response, e.g. 200 or 404.
-
-
 
 =item %[apache_time], %t
 
@@ -428,8 +418,6 @@ C<strftime> argument, they differ in their default formats. This escape
 defaults to a "human readable" format which is lousy to parse, but is
 nonetheless compatible with apache.
 
-
-
 =item %[time], %[datetime]
 
 The time that the request was received.
@@ -439,14 +427,10 @@ C<strftime> argument, they differ in their default formats. This escape
 defaults to the C<time_format> config option passed to the constructor.
 If that option is not provided, the default is ISO 8601.
 
-
-
 =item %[remote_user], %u
 
 The REMOTE_USER variable as set by HTTP basic auth, or certain frontend
 authentication methods. Returns a dash C<-> if no such thing exists.
-
-
 
 =item %[host_port], %v, %V
 
@@ -454,61 +438,41 @@ The host and the port of the request URI. Apache specifies that these should
 be the server's "canonical" host and port, but this information is
 unavailable to Catalyst.
 
-
-
 =item %[hostname]
 
 The hostname of the request URI.
-
-
 
 =item %[path], %U
 
 The request path (relative to the application root, but with a leading
 slash).
 
-
-
 =item %[handle_time], %T
 
 The time spent handling this request, as provided by the C<< $c->stats >>
 object. Returns a dash C<-> if stats are unavailable.
 
-
-
 =item %[action]
 
 The private path of the Catalyst action that handled the request.
-
-
 
 =item %[sessionid]
 
 The session ID, if there is one, otherwise "-".
 
-
-
 =item %[userid]
 
 The user ID, if Authentication is enabled and a user exists, otherwise "-"
-
-
 
 =item %[request_count]
 
 The request count for the current process, as displayed in debug info.
 
-
-
 =item %[pid]
 
 The process ID of the instance handling the request.
 
-
-
-=back 
-
-
+=back
 
 =head1 AUTHORS
 
@@ -522,6 +486,5 @@ This software is copyright (c) 2009 by Andrew Rodland.
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
-=cut 
-
+=cut
 
