@@ -1,5 +1,4 @@
 package MockUser;
-our $VERSION = '1.01';
 
 use Moose;
 

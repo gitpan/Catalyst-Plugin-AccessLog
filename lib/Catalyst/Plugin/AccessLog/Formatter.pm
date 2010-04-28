@@ -1,5 +1,7 @@
 package Catalyst::Plugin::AccessLog::Formatter;
-our $VERSION = '1.01';
+BEGIN {
+  $Catalyst::Plugin::AccessLog::Formatter::VERSION = '1.02';
+}
 
 # ABSTRACT: Log formatter for Catalyst::Plugin::AccessLog
 
@@ -174,21 +176,12 @@ item ['s', 'status'] => sub {
 };
 
 
-sub _request_start {
-  my ($c) = @_;
-
-  # Remove the hack when we're comfortable depending on Catalyst 5.8008.
-  my @time = $c->stats->can('created')
-    ? $c->stats->created
-    : @{ $c->stats->{tree}->getNodeValue->{t} };
-  return $time[0] + $time[1] / 1_000_000;
-}
-
 item ['t', 'apache_time'] => sub {
   my ($self, $c, $arg) = @_;
   return "-" unless $c->use_stats;
   my $format = $arg || '[%d/%b/%Y:%H:%M:%S %z]'; # Apache default
-  return DateTime->from_epoch(epoch => _request_start($c), 
+  my @start_time = $c->stats->created;
+  return DateTime->from_epoch(epoch => $start_time[0] + $start_time[1] / 1_000_000, 
     time_zone => $self->time_zone)->strftime($format);
 };
 
@@ -197,8 +190,8 @@ item ['time', 'datetime'] => sub {
   my ($self, $c, $arg) = @_;
   return "-" unless $c->use_stats;
   my $format = $arg || $self->time_format;
-
-  return DateTime->from_epoch(epoch => _request_start($c),
+  my @start_time = $c->stats->created;
+  return DateTime->from_epoch(epoch => $start_time[0] + $start_time[1] / 1_000_000,
     time_zone => $self->time_zone)->strftime($format);
 };
 
@@ -276,7 +269,7 @@ Catalyst::Plugin::AccessLog::Formatter - Log formatter for Catalyst::Plugin::Acc
 
 =head1 VERSION
 
-version 1.01
+version 1.02
 
 =head1 DESCRIPTION
 
@@ -481,7 +474,7 @@ The process ID of the instance handling the request.
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2009 by Andrew Rodland.
+This software is copyright (c) 2010 by Andrew Rodland.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

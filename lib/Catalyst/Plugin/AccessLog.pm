@@ -1,5 +1,8 @@
 package Catalyst::Plugin::AccessLog;
-our $VERSION = '1.01';
+BEGIN {
+  $Catalyst::Plugin::AccessLog::VERSION = '1.02';
+}
+# ABSTRACT: Request logging from within Catalyst
 
 use namespace::autoclean;
 use Moose::Role;
@@ -78,11 +81,11 @@ __END__
 
 =head1 NAME
 
-Catalyst::Plugin::AccessLog
+Catalyst::Plugin::AccessLog - Request logging from within Catalyst
 
 =head1 VERSION
 
-version 1.01
+version 1.02
 
 =head1 SYNOPSIS
 
@@ -184,7 +187,7 @@ L<http://github.com/arodland/Catalyst-Plugin-AccessLog>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2009 by Andrew Rodland.
+This software is copyright (c) 2010 by Andrew Rodland.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
