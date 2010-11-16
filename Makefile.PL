@@ -9,32 +9,42 @@ use ExtUtils::MakeMaker 6.31;
 
 
 my %WriteMakefileArgs = (
-                       'test' => {
-                                   'TESTS' => 't/*.t'
-                                 },
-                       'NAME' => 'Catalyst::Plugin::AccessLog',
-                       'DISTNAME' => 'Catalyst-Plugin-AccessLog',
-                       'CONFIGURE_REQUIRES' => {
-                                                 'ExtUtils::MakeMaker' => '6.31'
-                                               },
-                       'AUTHOR' => 'Andrew Rodland <andrew@hbslabs.com>, Murray <sysmon@cpan.org>',
-                       'BUILD_REQUIRES' => {},
-                       'ABSTRACT' => 'Request logging from within Catalyst',
-                       'EXE_FILES' => [],
-                       'VERSION' => '1.02',
-                       'PREREQ_PM' => {
-                                        'DateTime' => '0',
-                                        'Scalar::Util' => '0',
-                                        'namespace::autoclean' => '0',
-                                        'Catalyst::Runtime' => '5.80008',
-                                        'Moose' => '0'
-                                      },
-                       'LICENSE' => 'perl'
-                     );
+  'ABSTRACT' => 'Request logging from within Catalyst',
+  'AUTHOR' => 'Andrew Rodland <andrew@hbslabs.com>, Murray <sysmon@cpan.org>',
+  'BUILD_REQUIRES' => {},
+  'CONFIGURE_REQUIRES' => {
+    'ExtUtils::MakeMaker' => '6.31'
+  },
+  'DISTNAME' => 'Catalyst-Plugin-AccessLog',
+  'EXE_FILES' => [],
+  'LICENSE' => 'perl',
+  'NAME' => 'Catalyst::Plugin::AccessLog',
+  'PREREQ_PM' => {
+    'Catalyst::Runtime' => '5.80008',
+    'DateTime' => '0',
+    'Moose' => '0',
+    'Scalar::Util' => '0',
+    'namespace::autoclean' => '0'
+  },
+  'VERSION' => '1.03',
+  'test' => {
+    'TESTS' => 't/*.t'
+  }
+);
 
 
-delete $WriteMakefileArgs{BUILD_REQUIRES}
-  unless eval { ExtUtils::MakeMaker->VERSION(6.56) };
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
+  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
+  my $pp = $WriteMakefileArgs{PREREQ_PM};
+  for my $mod ( keys %$br ) {
+    if ( exists $pp->{$mod} ) {
+      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
+    }
+    else {
+      $pp->{$mod} = $br->{$mod};
+    }
+  }
+}
 
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };

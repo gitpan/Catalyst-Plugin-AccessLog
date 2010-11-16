@@ -1,6 +1,6 @@
 package Catalyst::Plugin::AccessLog::Formatter;
 BEGIN {
-  $Catalyst::Plugin::AccessLog::Formatter::VERSION = '1.02';
+  $Catalyst::Plugin::AccessLog::Formatter::VERSION = '1.03';
 }
 
 # ABSTRACT: Log formatter for Catalyst::Plugin::AccessLog
@@ -269,7 +269,7 @@ Catalyst::Plugin::AccessLog::Formatter - Log formatter for Catalyst::Plugin::Acc
 
 =head1 VERSION
 
-version 1.02
+version 1.03
 
 =head1 DESCRIPTION
 
@@ -469,8 +469,17 @@ The process ID of the instance handling the request.
 
 =head1 AUTHORS
 
-  Andrew Rodland <andrew@hbslabs.com>
-  Murray <sysmon@cpan.org>
+=over 4
+
+=item *
+
+Andrew Rodland <andrew@hbslabs.com>
+
+=item *
+
+Murray <sysmon@cpan.org>
+
+=back
 
 =head1 COPYRIGHT AND LICENSE
 

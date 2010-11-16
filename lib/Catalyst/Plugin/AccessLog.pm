@@ -1,6 +1,6 @@
 package Catalyst::Plugin::AccessLog;
 BEGIN {
-  $Catalyst::Plugin::AccessLog::VERSION = '1.02';
+  $Catalyst::Plugin::AccessLog::VERSION = '1.03';
 }
 # ABSTRACT: Request logging from within Catalyst
 
@@ -85,7 +85,7 @@ Catalyst::Plugin::AccessLog - Request logging from within Catalyst
 
 =head1 VERSION
 
-version 1.02
+version 1.03
 
 =head1 SYNOPSIS
 
@@ -136,7 +136,7 @@ it. If C<target> is an object with an C<info> method it's assumed to be a
 logging object (e.g. L<Log::Dispatch> or L<Log::Log4perl>) and lines will be
 passed to the C<info> method. If it's a C<CODE> ref then it will be called
 with each line of logging output. If it's an unblessed scalar it will be
-interpreted as a filehandle and the plugin will try to open it for append
+interpreted as a filename and the plugin will try to open it for append
 and write lines to it.
 
 =item formatter
@@ -182,8 +182,17 @@ L<http://github.com/arodland/Catalyst-Plugin-AccessLog>
 
 =head1 AUTHORS
 
-  Andrew Rodland <andrew@hbslabs.com>
-  Murray <sysmon@cpan.org>
+=over 4
+
+=item *
+
+Andrew Rodland <andrew@hbslabs.com>
+
+=item *
+
+Murray <sysmon@cpan.org>
+
+=back
 
 =head1 COPYRIGHT AND LICENSE
 
