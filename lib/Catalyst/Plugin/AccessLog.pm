@@ -1,6 +1,6 @@
 package Catalyst::Plugin::AccessLog;
 BEGIN {
-  $Catalyst::Plugin::AccessLog::VERSION = '1.03';
+  $Catalyst::Plugin::AccessLog::VERSION = '1.04';
 }
 # ABSTRACT: Request logging from within Catalyst
 
@@ -85,7 +85,7 @@ Catalyst::Plugin::AccessLog - Request logging from within Catalyst
 
 =head1 VERSION
 
-version 1.03
+version 1.04
 
 =head1 SYNOPSIS
 
@@ -196,7 +196,7 @@ Murray <sysmon@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Andrew Rodland.
+This software is copyright (c) 2011 by Andrew Rodland.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

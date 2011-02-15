@@ -1,6 +1,6 @@
 package Catalyst::Plugin::AccessLog::Formatter;
 BEGIN {
-  $Catalyst::Plugin::AccessLog::Formatter::VERSION = '1.03';
+  $Catalyst::Plugin::AccessLog::Formatter::VERSION = '1.04';
 }
 
 # ABSTRACT: Log formatter for Catalyst::Plugin::AccessLog
@@ -63,9 +63,9 @@ sub format_line {
       $output .= $self->get_item($c, $2, $1);
     } elsif ($format =~ /\G \% $longopt/cgx) { # Long opt
       $output .= $self->get_item($c, $1);
-    } elsif ($format =~ /\G \% $argument (.)/cgx) { # Short opt with argument
+    } elsif ($format =~ /\G \% [<>]? $argument (.)/cgx) { # Short opt with argument
       $output .= $self->get_item($c, $2, $1);
-    } elsif ($format =~ /\G \% (.)/cgx) { # Short opt
+    } elsif ($format =~ /\G \% [<>]? (.)/cgx) { # Short opt
       $output .= $self->get_item($c, $1);
     } else {
       warn "Can't happen!";
@@ -269,7 +269,7 @@ Catalyst::Plugin::AccessLog::Formatter - Log formatter for Catalyst::Plugin::Acc
 
 =head1 VERSION
 
-version 1.03
+version 1.04
 
 =head1 DESCRIPTION
 
@@ -286,7 +286,10 @@ single character, for example C<%h> for the remote hostname. Long
 escapes consist of a C<%> followed by a name inside B<square brackets>, for
 example C<%[remote_hostname]> for the same option. Apache-compatible
 options have both short escapes and long escapes, while incompatible options
-have only long escapes.
+have only long escapes. For compatibility, short escapes may have a
+"redirection specifier" C<< < >> or C<< > >> inserted after the C<%>, e.g.
+C<< %>s >> as used in the default Combined log format, but this does nothing,
+as this module has no support for tracking sub-requests.
 
 Some escapes (currently C<%[time]>, C<%[apache_time]>, C<%[header]>, and
 C<%[apache_header]>) may also take an argument, which can be optional or
@@ -483,7 +486,7 @@ Murray <sysmon@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Andrew Rodland.
+This software is copyright (c) 2011 by Andrew Rodland.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
