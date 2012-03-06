@@ -1,5 +1,9 @@
 Changes for Catalyst::Plugin::AccessLog
 
+1.05 2012-03-06
+  * Fix the tests to pass with Catalyst 5.90009+ (fixes "attribute _log
+      is required" error)
+
 1.04 2011-02-14
   * Accept ">" and "<" in formats like "%>s" which Apache uses.
 

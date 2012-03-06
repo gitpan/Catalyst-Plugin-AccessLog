@@ -4,16 +4,16 @@ use warnings;
 
 
 
-use ExtUtils::MakeMaker 6.31;
+use ExtUtils::MakeMaker 6.30;
 
 
 
 my %WriteMakefileArgs = (
   'ABSTRACT' => 'Request logging from within Catalyst',
-  'AUTHOR' => 'Andrew Rodland <andrew@hbslabs.com>, Murray <sysmon@cpan.org>',
+  'AUTHOR' => 'Andrew Rodland <andrew@cleverdomain.org>, Murray <sysmon@cpan.org>',
   'BUILD_REQUIRES' => {},
   'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.31'
+    'ExtUtils::MakeMaker' => '6.30'
   },
   'DISTNAME' => 'Catalyst-Plugin-AccessLog',
   'EXE_FILES' => [],
@@ -26,7 +26,7 @@ my %WriteMakefileArgs = (
     'Scalar::Util' => '0',
     'namespace::autoclean' => '0'
   },
-  'VERSION' => '1.04',
+  'VERSION' => '1.05',
   'test' => {
     'TESTS' => 't/*.t'
   }

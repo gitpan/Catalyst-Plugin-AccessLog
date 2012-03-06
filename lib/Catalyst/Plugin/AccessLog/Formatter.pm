@@ -1,6 +1,6 @@
 package Catalyst::Plugin::AccessLog::Formatter;
-BEGIN {
-  $Catalyst::Plugin::AccessLog::Formatter::VERSION = '1.04';
+{
+  $Catalyst::Plugin::AccessLog::Formatter::VERSION = '1.05';
 }
 
 # ABSTRACT: Log formatter for Catalyst::Plugin::AccessLog
@@ -269,7 +269,7 @@ Catalyst::Plugin::AccessLog::Formatter - Log formatter for Catalyst::Plugin::Acc
 
 =head1 VERSION
 
-version 1.04
+version 1.05
 
 =head1 DESCRIPTION
 
@@ -476,7 +476,7 @@ The process ID of the instance handling the request.
 
 =item *
 
-Andrew Rodland <andrew@hbslabs.com>
+Andrew Rodland <andrew@cleverdomain.org>
 
 =item *
 
@@ -486,7 +486,7 @@ Murray <sysmon@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Andrew Rodland.
+This software is copyright (c) 2012 by Andrew Rodland.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

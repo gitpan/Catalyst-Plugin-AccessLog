@@ -8,6 +8,8 @@ use Test::More tests => 40;
 use TestApp;
 use MockStats;
 use MockUser;
+use Catalyst::Log;
+use Catalyst::Request;
 
 ## Set up the context ##
 my $c = bless {}, 'TestApp';
@@ -21,6 +23,7 @@ $c->req(
     secure => 0,
     uri => URI->new("http://testapp/foo/bar?answer=42"),
     address => '127.0.0.1',
+    _log => Catalyst::Log->new(),
   )
 );
 $c->req->path('foo/bar');
